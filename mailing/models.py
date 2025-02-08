@@ -16,10 +16,10 @@ class Mail(models.Model):
         (CREATED, 'Created'),
     ]
 
-    first_sending = models.DateTimeField(auto_now_add=True)
+    first_sending = models.DateTimeField(null=True)
     end_sending = models.DateTimeField(null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=CREATED)
-    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    message = models.ForeignKey(Message, related_name="mails", on_delete=models.CASCADE)
     client = models.ManyToManyField(Client)
 
     class Meta:

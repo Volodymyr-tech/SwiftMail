@@ -6,6 +6,11 @@ from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 
 
 # Create your views here.
+class ClientListView(ListView):
+    model = Client
+    template_name = 'pages/client_list.html'
+    context_object_name = 'clients'
+
 
 class HomeView(ListView):
     model = Client

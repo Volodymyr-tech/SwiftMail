@@ -1,0 +1,26 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<main class="container mb-5">
+  <div class="d-flex align-items-center p-3 my-3 text-white bg-gradient-warning rounded shadow-sm">
+    <div class="lh-1">
+      <h1 class="h6 mb-0 text-white lh-1">The list of mails</h1>
+    </div>
+  </div>
+
+  {% for mail in mails %}
+        <div class="card mt-3 {% if forloop.last %}mb-5{% endif %}" >
+          <div class="card-header">
+              {{ mail.status }}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{ mail.subject }}</h5>
+            <p class="card-text">{{ mail.message }}</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+  {% endfor %}
+    </main>
+{% endblock %}

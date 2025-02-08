@@ -11,7 +11,7 @@ from message.models import Message
 # Create your views here.
 class MessageListView(ListView):
     model = Message
-    template_name = 'pages/list.html'
+    template_name = 'pages/messages_list.html'
     context_object_name = 'messages'
 
 

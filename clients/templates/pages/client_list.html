@@ -1,0 +1,24 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="d-flex align-items-center p-3 my-3 text-white bg-gradient-warning rounded shadow-sm">
+    <div class="lh-1">
+      <h1 class="h6 mb-0 text-white lh-1">The list of users available for mailing</h1>
+    </div>
+  </div>
+
+  {% for client in clients %}
+<div class="card mt-3 {% if forloop.last %}mb-5{% endif %}">
+  <div class="card-body">
+    <h5 class="card-title">{{ client }}</h5>
+    <p class="card-text">{{ client.comment }}</p>
+    <a href="{% url 'clients:detail-client' client.pk %}" class="btn btn-primary">Get look</a>
+  </div>
+</div>
+  {% empty %}
+  {% endfor %}
+</main>
+{% endblock %}
