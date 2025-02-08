@@ -1,10 +1,10 @@
 from django import forms
 
-from clients.models import Client
+from message.models import Message
 from utils.mixins import StyleProductMixin
 
 
-class ClientForm(StyleProductMixin, forms.ModelForm):
+class CreateMessageForm(StyleProductMixin, forms.ModelForm):
     class Meta:
-        model = Client
+        model = Message
         fields = '__all__'  # Теперь Django знает, какие поля использовать
