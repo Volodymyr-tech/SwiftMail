@@ -6,6 +6,8 @@ class Client(models.Model):
     name = models.CharField(max_length=155) #Можно разделить на 3 поля или last name first name
     comment = models.CharField(max_length=255)
 
+
+
     def __str__(self):
         return f'{self.name} ({self.email})'
 

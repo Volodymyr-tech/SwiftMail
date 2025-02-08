@@ -29,3 +29,9 @@ class DeleteClientView(DeleteView):
     model = Client
     template_name = 'forms/delete_client.html'
     success_url = reverse_lazy('clients:home')
+
+
+class DetailClientView(DeleteView):
+    model = Client
+    template_name = 'pages/client_detail.html'
+    context_object_name = 'client'
