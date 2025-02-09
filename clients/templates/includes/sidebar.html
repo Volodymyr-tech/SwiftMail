@@ -85,9 +85,16 @@
                         <a class="collapse-item" href="register.html">List of users</a>
                         <a class="collapse-item" href="forgot-password.html">All recipients</a>
                         <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <h6 class="collapse-header">Other func:</h6>
+                        {% if not user.is_authenticated %}
+                        <a class="collapse-item" href="{% url 'users:login' %}">LogIn</a>
+                        {% elif user.is_authenticated %}
+                        <a class="collapse-item" href="404.html">Change your profile</a>
+                        <form method="post" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="dropdown-item">LogOut</button>
+                        </form>
+                        {% endif %}
                     </div>
                 </div>
             </li>

@@ -134,4 +134,19 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "users.CustomUser"
+AUTH_USER_MODEL = "users.CustomUser" #necessary to register users
+
+LOGIN_REDIRECT_URL = "clients:home"
+LOGOUT_REDIRECT_URL = "clients:home"
+LOGIN_URL = "/users/login/"
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST")  # SMTP сервер Yandex
+EMAIL_PORT = os.getenv("EMAIL_PORT")  # Порт для SSL
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL")  # SSL для безопасного подключения
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # почта на Yandex
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # Пароль приложения Yandex
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
