@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import ListView, UpdateView, CreateView, DeleteView, DetailView
 
 from mailing.forms import MailForm
 from mailing.models import Mail
@@ -40,7 +40,7 @@ class AddMailView(CreateView):
 class UpdateMailView(UpdateView):
     model = Mail
     form_class = MailForm
-    template_name = 'forms/edit_mail.html'
+    template_name = 'forms/update_mail.html'
     success_url = reverse_lazy('message:list')
 
 class DeleteMailView(DeleteView):
@@ -49,7 +49,7 @@ class DeleteMailView(DeleteView):
     success_url = reverse_lazy('message:list')
 
 
-class DetailMailView(DeleteView):
+class DetailMailView(DetailView):
     model = Mail
-    template_name = 'pages/mail_detail.html'
+    template_name = 'pages/detail_mail.html'
     context_object_name = 'mail'
