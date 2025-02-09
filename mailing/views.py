@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView, DetailView
@@ -10,7 +11,7 @@ from utils.email_service import EmailSender
 
 # Create your views here.
 
-class MailListView(ListView):
+class MailListView(LoginRequiredMixin, ListView):
     model = Mail
     template_name = 'pages/mails_list.html'
     context_object_name = 'mails'
@@ -34,7 +35,7 @@ class MailListView(ListView):
         return queryset  # Без фильтрации
 
 
-class AddMailView(CreateView):
+class AddMailView(LoginRequiredMixin, CreateView):
     model = Mail
     form_class = MailForm
     template_name = 'forms/add_mail.html'
@@ -49,19 +50,19 @@ class AddMailView(CreateView):
         return super().form_valid(form)
 
 
-class UpdateMailView(UpdateView):
+class UpdateMailView(LoginRequiredMixin, UpdateView):
     model = Mail
     form_class = MailForm
     template_name = 'forms/update_mail.html'
     success_url = reverse_lazy('mailing:list')
 
-class DeleteMailView(DeleteView):
+class DeleteMailView(LoginRequiredMixin, DeleteView):
     model = Mail
     template_name = 'forms/delete_mail.html'
     success_url = reverse_lazy('message:list')
 
 
-class DetailMailView(DetailView):
+class DetailMailView(LoginRequiredMixin, DetailView):
     model = Mail
     template_name = 'pages/detail_mail.html'
     context_object_name = 'mail'

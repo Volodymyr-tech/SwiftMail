@@ -30,9 +30,9 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(unique=True)
     avatar = models.ImageField(upload_to="users/avatars/", blank=True, null=True)
-    #token = models.CharField(
-    #    max_length=100, verbose_name="Token", blank=True, null=True
-    #)
+    token = models.CharField(
+        max_length=100, verbose_name="Token", blank=True, null=True
+    )
     country = models.CharField(
         max_length=20,
         verbose_name="Страна проживания",
