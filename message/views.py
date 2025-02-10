@@ -44,6 +44,13 @@ class ReadMessageView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     context_object_name ='message'
     permission_required = ('message.view_message',)
 
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset)
+        if object.owner == self.request.user and self.request.user.has_perm('message.view_message'):
+            return object
+        else:
+            raise PermissionDenied()
+
 
 class UpdateMessageView(LoginRequiredMixin , PermissionRequiredMixin, UpdateView):
     model = Message
@@ -51,6 +58,13 @@ class UpdateMessageView(LoginRequiredMixin , PermissionRequiredMixin, UpdateView
     template_name ='forms/update_message.html'
     success_url = reverse_lazy('messages:list')
     permission_required = ('message.change_message',)
+
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset)
+        if object.owner == self.request.user and self.request.user.has_perm('message.change_message'):
+            return object
+        else:
+            raise PermissionDenied()
 
 
 
