@@ -71,11 +71,12 @@ class UpdateMessageView(LoginRequiredMixin , PermissionRequiredMixin, UpdateView
 class DeleteMessageView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = Message
     template_name ='forms/delete_message.html'
+    permission_required = ('message.delete_message',)
 
     def get_object(self, queryset=None):
         object = super().get_object(queryset)
-        if not self.request.user.has_perm('message.delete_message', object):
-            raise PermissionDenied()
+        if not self.request.user.has_perm('message.delete_message') and object.owner != self.request.user:
+                raise PermissionDenied()
         return object
 
 

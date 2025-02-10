@@ -1,4 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView, DetailView
@@ -11,7 +13,7 @@ from utils.email_service import EmailSender
 
 # Create your views here.
 
-class MailListView(LoginRequiredMixin, ListView):
+class MailListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Mail
     template_name = 'pages/mails_list.html'
     context_object_name = 'mails'
@@ -35,11 +37,12 @@ class MailListView(LoginRequiredMixin, ListView):
         return queryset  # Без фильтрации
 
 
-class AddMailView(LoginRequiredMixin, CreateView):
+class AddMailView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Mail
     form_class = MailForm
     template_name = 'forms/add_mail.html'
     success_url = reverse_lazy('mailing:list')
+    permission_required = ('mailing.add_mail')
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -50,25 +53,50 @@ class AddMailView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdateMailView(LoginRequiredMixin, UpdateView):
+class UpdateMailView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Mail
     form_class = MailForm
     template_name = 'forms/update_mail.html'
     success_url = reverse_lazy('mailing:list')
+    permission_required = ('mailing.change_mail')
 
-class DeleteMailView(LoginRequiredMixin, DeleteView):
+
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset)
+        if object.owner == self.request.user and self.request.user.has_perm('mailing.change_mail'):
+            return object
+        else:
+            raise PermissionDenied()
+
+class DeleteMailView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Mail
     template_name = 'forms/delete_mail.html'
     success_url = reverse_lazy('message:list')
+    permission_required = ('mailing.delete_mail')
 
 
-class DetailMailView(LoginRequiredMixin, DetailView):
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset)
+        if not self.request.user.has_perm('mailing.delete_mail') and object.owner != self.request.user:
+                raise PermissionDenied()
+        return object
+
+
+class DetailMailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = Mail
     template_name = 'pages/detail_mail.html'
     context_object_name = 'mail'
+    permission_required = ('mailing.view_mail')
 
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset)
+        if object.owner == self.request.user and self.request.user.has_perm('mailing.view_mail'):
+            return object
+        else:
+            raise PermissionDenied()
 
-
+@login_required
+@permission_required('mailing.change_mail',raise_exception=True )
 def start_mailing(request, pk):
     mailing = get_object_or_404(Mail, pk=pk)
     if mailing.status != "Sending":
