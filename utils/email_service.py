@@ -45,4 +45,6 @@ class EmailSender:
 
         # Обновление статуса рассылки
         mailing.status = "Sent"
+        mailing.end_sending = timezone.now()
         mailing.save()
+

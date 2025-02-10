@@ -44,7 +44,7 @@ class AddMailView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.owner = self.request.user
-        print(f"Назначенный владелец: {self.object.owner}")  # ✅ Проверяем, что `owner` не пустой
+        print(f"Назначенный владелец: {self.object.owner}")  # Проверяем, что `owner` не пустой
         self.object.save()
         self.object.client.set(form.cleaned_data['client'])
         return super().form_valid(form)
