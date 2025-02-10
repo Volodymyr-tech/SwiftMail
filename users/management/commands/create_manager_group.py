@@ -15,7 +15,7 @@ class Command(BaseCommand):
             view_customuser = Permission.objects.get(codename="view_customuser")
 
 
-            group.permissions.add()
+            group.permissions.add(view_client, view_mail, change_mail, change_customuser, view_customuser)
 
             if created:
                 self.stdout.write(self.style.SUCCESS("The 'Managers' group has been successfully created"))
