@@ -4,6 +4,7 @@
 
 {% block content %}
 <!-- Dropdown Card Example -->
+{% if user.is_authenticated and user|has_perm:'clients.view_client' %}
 <div class="card shadow mb-4">
     <!-- Card Header - Dropdown -->
     <div
@@ -17,9 +18,11 @@
             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                 aria-labelledby="dropdownMenuLink">
                 <div class="dropdown-header">Client management:</div>
+                {% if user == client.owner %}
                 <a class="dropdown-item" href="{% url 'clients:update-client' pk=client.pk  %}">Update client</a>
                 <a class="dropdown-item" href="{% url 'clients:delete-client' pk=client.pk  %}">Delete client</a>
                 <div class="dropdown-divider"></div>
+                {% endif %}
                 <a class="dropdown-item" href="#">Something else here</a>
             </div>
         </div>
@@ -113,4 +116,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}

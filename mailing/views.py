@@ -47,7 +47,20 @@ class AllMailListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     def get_queryset(self):
         if self.request.user.has_perm('mail.view_mail') and self.request.user.groups.filter(name="Managers"):
             queryset = super().get_queryset()
-            return queryset
+            filter_param = self.request.GET.get("filter")  # Получаем параметр `filter`
+
+            print("GET parameters:", self.request.GET)  # Логируем параметры
+
+            if filter_param == "Sent":
+                return queryset.filter(status="Sent")  # Фильтр по статусу
+            elif filter_param == "Sending":
+                return queryset.filter(status="Sending")
+            elif filter_param == "Created":
+                return queryset.filter(status="Created")
+            else:
+                return queryset.order_by("-first_sending")
+
+            #return queryset  # Без фильтрации
         else:
             raise PermissionDenied()
 
@@ -118,3 +131,12 @@ def start_mailing(request, pk):
         mailing.first_sending = timezone.now()
         mailing.save()
     return redirect('mailing:list')
+
+@login_required
+@permission_required('mailing.change_mail', raise_exception=True )
+def stop_mailing(request, pk):
+    mailing = get_object_or_404(Mail, pk=pk)
+    if mailing.status != "Sent":
+        mailing.status = "Sent"
+        mailing.save()
+    return redirect('mailing:all_mail')

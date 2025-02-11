@@ -24,7 +24,6 @@
   <div class="card-body">
     <h5 class="card-title">{{ client }}</h5>
     <p class="card-text">{{ client.comment }}</p>
-    <a href="{% url 'clients:detail-client' client.pk %}" class="btn btn-primary">Get look</a>
   </div>
 </div>
   {% empty %}

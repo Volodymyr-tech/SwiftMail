@@ -1,5 +1,6 @@
 import secrets
 
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
@@ -75,3 +76,13 @@ class AllCustomUserListView(LoginRequiredMixin, PermissionRequiredMixin, ListVie
             return queryset
         else:
             raise PermissionDenied()
+
+
+@login_required
+@permission_required('customuser.change_customuser', raise_exception=True )
+def block_user(request, pk):
+    user = get_object_or_404(CustomUser, pk=pk)
+    if user.is_active == True:
+        user.is_active = False
+        user.save()
+    return redirect('users:all-customusers')

@@ -13,10 +13,10 @@
             Order by
         </button>
         <ul class="dropdown-menu dropdown-menu-end">  <!-- Меню откроется справа -->
-            <li><a class="dropdown-item" href="{% url 'mailing:list' %}">Recently Added</a></li>
-            <li><a class="dropdown-item" href="{% url 'mailing:list' %}?filter=Created">Created</a></li>
-            <li><a class="dropdown-item" href="{% url 'mailing:list' %}?filter=Sending">Sending</a></li>
-            <li><a class="dropdown-item" href="{% url 'mailing:list' %}?filter=Sent">Sent</a></li>
+            <li><a class="dropdown-item" href="{% url 'mailing:all_mail' %}">Recently Added</a></li>
+            <li><a class="dropdown-item" href="{% url 'mailing:all_mail' %}?filter=Created">Created</a></li>
+            <li><a class="dropdown-item" href="{% url 'mailing:all_mail' %}?filter=Sending">Sending</a></li>
+            <li><a class="dropdown-item" href="{% url 'mailing:all_mail' %}?filter=Sent">Sent</a></li>
         </ul>
     </div>
 </div>
@@ -28,7 +28,9 @@
           <div class="card-body">
             <h5 class="card-title">{{ mail.subject }}</h5>
             <p class="card-text">{{ mail.message }}</p>
-            <a href="{% url 'mailing:detail-mail' pk=mail.pk  %}" class="btn btn-primary">Check it out</a>
+              {% if mail.status != 'Sent' %}
+            <a href="{% url 'mailing:stop_mailing' pk=mail.pk %}" class="btn btn-primary">Deactivate</a>
+              {% endif %}
           </div>
         </div>
   {% endfor %}
