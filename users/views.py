@@ -1,12 +1,13 @@
 import secrets
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
-
+from django.views.generic import ListView
 from config.settings import EMAIL_HOST_USER
 from users.forms import CustomUserCreationForm, UserLoginForm, UserEditForm
 from users.models import CustomUser
@@ -59,3 +60,18 @@ class UpdateCustomUser(LoginRequiredMixin, UpdateView):
     form_class = UserEditForm
     template_name = "users/update_user_form.html"
     success_url = reverse_lazy("clients:home")
+
+
+class AllCustomUserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = CustomUser
+    template_name = 'users/all_customuser.html'
+    context_object_name = 'customusers'
+    permission_required = ('customuser.view_customuser')
+
+
+    def get_queryset(self):
+        if self.request.user.has_perm('customuser.view_customuser') and self.request.user.groups.filter(name="Managers"):
+            queryset = super().get_queryset()
+            return queryset
+        else:
+            raise PermissionDenied()

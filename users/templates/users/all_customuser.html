@@ -1,0 +1,33 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<main class="container">
+<div class="d-flex align-items-center justify-content-between p-3 my-3 text-white bg-gradient-warning rounded shadow-sm">
+    <div class="lh-1">
+        <h1 class="h6 mb-0 text-white lh-1"><strong>The list of all users in SWIFTMAIL</strong></h1>
+    </div>
+    <div class="dropdown ms-auto">
+        <button class="btn bg-gradient-primary dropdown-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Order by
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">  <!-- Меню откроется справа -->
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+    </div>
+</div>
+  {% for user in customusers %}
+<div class="card mt-3 {% if forloop.last %}mb-5{% endif %}">
+  <div class="card-body">
+    <h5 class="card-title">{{ user.username }}</h5>
+    <p class="card-text">{{ user.email }}</p>
+    <a href="#" class="btn btn-primary">Get look</a>
+  </div>
+</div>
+  {% empty %}
+  {% endfor %}
+</main>
+{% endblock %}

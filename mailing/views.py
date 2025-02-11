@@ -17,6 +17,7 @@ class MailListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Mail
     template_name = 'pages/mails_list.html'
     context_object_name = 'mails'
+    permission_required = ('mailing.view_mail')
 
 
     def get_queryset(self):
@@ -36,6 +37,19 @@ class MailListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         return queryset  # Без фильтрации
 
+class AllMailListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Mail
+    template_name = 'pages/all_mail.html'
+    context_object_name = 'mails'
+    permission_required = ('mail.view_mail')
+
+
+    def get_queryset(self):
+        if self.request.user.has_perm('mail.view_mail') and self.request.user.groups.filter(name="Managers"):
+            queryset = super().get_queryset()
+            return queryset
+        else:
+            raise PermissionDenied()
 
 class AddMailView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Mail

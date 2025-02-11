@@ -66,7 +66,19 @@ class UpdateMessageView(LoginRequiredMixin , PermissionRequiredMixin, UpdateView
         else:
             raise PermissionDenied()
 
+class AllCMessageListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Message
+    template_name = 'pages/all_message.html'
+    context_object_name = 'messages'
+    permission_required = ('message.view_message')
 
+
+    def get_queryset(self):
+        if self.request.user.has_perm('message.view_message') and self.request.user.groups.filter(name="Managers"):
+            queryset = super().get_queryset()
+            return queryset
+        else:
+            raise PermissionDenied()
 
 class DeleteMessageView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = Message

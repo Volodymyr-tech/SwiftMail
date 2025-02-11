@@ -85,14 +85,14 @@
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                         aria-expanded="true" aria-controls="collapsePages">
                         <i class="fas fa-fw fa-wrench"></i>
-                        <span>Functions</span>
+                        <span>Advanced Features</span>
                     </a>
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Advanced Features:</h6>
-                            <a class="collapse-item" href="login.html">Create a user</a>
-                            <a class="collapse-item" href="register.html">List of users</a>
-                            <a class="collapse-item" href="forgot-password.html">All recipients</a>
+                            <h6 class="collapse-header">Functions:</h6>
+                            <a class="collapse-item" href="{% url 'mailing:all_mail' %}">All mailings</a>
+                            <a class="collapse-item" href="{% url 'users:all-customusers' %}">All users</a>
+                            <a class="collapse-item" href="{% url 'clients:all_clients' %}">All recipients</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Other func:</h6>
                         </div>

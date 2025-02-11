@@ -15,6 +15,7 @@ class ClientListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Client
     template_name = 'pages/client_list.html'
     context_object_name = 'clients'
+    permission_required = ('clients.view_client')
 
 
     def get_queryset(self):
@@ -24,6 +25,19 @@ class ClientListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         else:
             raise PermissionDenied()
 
+class AllClientsListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Client
+    template_name = 'pages/all_clients.html'
+    context_object_name = 'clients'
+    permission_required = ('clients.view_client')
+
+
+    def get_queryset(self):
+        if self.request.user.has_perm('clients.view_client') and self.request.user.groups.filter(name="Managers"):
+            queryset = super().get_queryset()
+            return queryset
+        else:
+            raise PermissionDenied()
 
 class HomeView(ListView):
     model = Client
@@ -87,3 +101,12 @@ class DetailClientView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Client
     template_name = 'pages/client_detail.html'
     context_object_name = 'client'
+    permission_required = ('clients.view_client',)
+
+
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset)
+        if object.owner == self.request.user and self.request.user.has_perm('clients.view_client'):
+            return object
+        else:
+            raise PermissionDenied()
