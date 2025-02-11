@@ -11,6 +11,7 @@ from django.views.generic import CreateView, UpdateView
 from django.views.generic import ListView
 from config.settings import EMAIL_HOST_USER
 from users.forms import CustomUserCreationForm, UserLoginForm, UserEditForm
+from users.management.commands.add_user_to_group import UserService
 from users.models import CustomUser
 
 
@@ -45,6 +46,7 @@ def email_verification(request, token):
     '''Подтверждение аккаута и сохранение в БД'''
     user = get_object_or_404(CustomUser, token=token)
     user.is_active = True
+    UserService.assign_service_user(user)
     user.save()
     return redirect(reverse_lazy("users:login"))
 
