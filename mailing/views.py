@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, redirect
 
 from mailing.forms import MailForm
 from mailing.models import Mail
+from mailing.services import CacheMailing
 from utils.email_service import EmailSender
 
 
@@ -21,21 +22,24 @@ class MailListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        filter_param = self.request.GET.get("filter")  # Получаем параметр `filter`
+        if self.request.user.has_perm('mail.view_mail'):
+            #queryset = super().get_queryset()
+            queryset = CacheMailing.get_cache_user_mails(self.request)
+            filter_param = self.request.GET.get("filter")  # Получаем параметр `filter`
 
-        print("GET parameters:", self.request.GET)  # Логируем параметры
+            print("GET parameters:", self.request.GET)  # Логируем параметры
 
-        if filter_param == "Sent":
-            return queryset.filter(status="Sent")  # Фильтр по статусу
-        elif filter_param == "Sending":
-            return queryset.filter(status="Sending")
-        elif filter_param == "Created":
-            return queryset.filter(status="Created")
+            if filter_param == "Sent":
+                return queryset.filter(status="Sent")  # Фильтр по статусу
+            elif filter_param == "Sending":
+                return queryset.filter(status="Sending")
+            elif filter_param == "Created":
+                return queryset.filter(status="Created")
+            else:
+                return queryset
+
         else:
-            return queryset.order_by("-first_sending")
-
-        return queryset  # Без фильтрации
+            raise PermissionDenied()
 
 class AllMailListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Mail
@@ -46,7 +50,7 @@ class AllMailListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.has_perm('mail.view_mail') and self.request.user.groups.filter(name="Managers"):
-            queryset = super().get_queryset()
+            queryset = CacheMailing.get_all_mails()
             filter_param = self.request.GET.get("filter")  # Получаем параметр `filter`
 
             print("GET parameters:", self.request.GET)  # Логируем параметры

@@ -6,6 +6,7 @@ from clients.forms import ClientForm
 from clients.models import Client
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 
+from clients.services import CacheClients
 from mailing.models import Mail
 from message.models import Message
 
@@ -20,10 +21,17 @@ class ClientListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.has_perm('clients.view_client'):
-            queryset = super().get_queryset()
-            return queryset.filter(owner=self.request.user)
+            queryset = CacheClients.get_cache_user_clients(self.request)
+            return queryset
         else:
             raise PermissionDenied()
+
+ #   def get_queryset(self):
+ #       if self.request.user.has_perm('clients.view_client'):
+ #           queryset = super().get_queryset()
+ #           return queryset.filter(owner=self.request.user)
+  #      else:
+ #           raise PermissionDenied()
 
 class AllClientsListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Client
@@ -34,10 +42,18 @@ class AllClientsListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.has_perm('clients.view_client') and self.request.user.groups.filter(name="Managers"):
-            queryset = super().get_queryset()
+            queryset = CacheClients.get_all_clients()
             return queryset
         else:
             raise PermissionDenied()
+
+
+#    def get_queryset(self):
+#        if self.request.user.has_perm('clients.view_client') and self.request.user.groups.filter(name="Managers"):
+#            queryset = super().get_queryset()
+#            return queryset
+#        else:
+#            raise PermissionDenied()
 
 class HomeView(ListView):
     model = Client
