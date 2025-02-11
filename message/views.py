@@ -8,6 +8,7 @@ from django.views.generic import CreateView, DetailView, UpdateView, ListView
 
 from message.forms import CreateMessageForm
 from message.models import Message
+from message.services import CacheMessage
 
 
 # Create your views here.
@@ -19,7 +20,8 @@ class MessageListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.has_perm('message.view_message'):
-            queryset = super().get_queryset()
+            queryset = CacheMessage.get_cache_user_messages(self.request)
+            #queryset = super().get_queryset()
             return queryset.filter(owner=self.request.user)
 
 
@@ -75,7 +77,8 @@ class AllCMessageListView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
 
     def get_queryset(self):
         if self.request.user.has_perm('message.view_message') and self.request.user.groups.filter(name="Managers"):
-            queryset = super().get_queryset()
+            queryset = CacheMessage.get_all_messages()
+            #queryset = super().get_queryset()
             return queryset
         else:
             raise PermissionDenied()

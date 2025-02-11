@@ -6,4 +6,4 @@ class MailingConfig(AppConfig):
     name = 'mailing'
 
     def ready(self):
-        import clients.signals
+        import mailing.signals
