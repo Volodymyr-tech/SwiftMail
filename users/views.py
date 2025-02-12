@@ -13,6 +13,7 @@ from config.settings import EMAIL_HOST_USER
 from users.forms import CustomUserCreationForm, UserLoginForm, UserEditForm
 from users.management.commands.add_user_to_group import UserService
 from users.models import CustomUser
+from users.services import CacheAllCustomUsers
 
 
 # Create your views here.
@@ -74,7 +75,7 @@ class AllCustomUserListView(LoginRequiredMixin, PermissionRequiredMixin, ListVie
 
     def get_queryset(self):
         if self.request.user.has_perm('customuser.view_customuser') and self.request.user.groups.filter(name="Managers"):
-            queryset = super().get_queryset()
+            queryset = CacheAllCustomUsers.get_cache_all_custom_users()
             return queryset
         else:
             raise PermissionDenied()
