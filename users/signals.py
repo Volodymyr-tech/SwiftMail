@@ -10,10 +10,5 @@ from users.models import CustomUser
 @receiver(post_delete, sender=CustomUser)
 def clear_mailing_custom_user(sender, instance, **kwargs):
     # Очищаем кэш для списка продуктов зарегистрированых и не зарегистрированых юзеров
-    cache.delete("cache_all_messages")
-
-    # ❗ Удаляем кэш списка для каждого user_id
-    for user_id in CustomUser.objects.values_list("id", flat=True):
-            cache.delete(f"cache_messages_{user_id}")
-
+    cache.delete("cache_all_custom_users")
     print("🚀 Cache is empty!")
