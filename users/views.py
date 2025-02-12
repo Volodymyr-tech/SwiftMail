@@ -2,7 +2,8 @@ import secrets
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordResetDoneView, PasswordResetConfirmView, \
+    PasswordResetCompleteView, PasswordResetView
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
@@ -89,3 +90,26 @@ def block_user(request, pk):
         user.is_active = False
         user.save()
     return redirect('users:all-customusers')
+
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'users/password_reset.html'  # Форма ввода email
+    email_template_name = 'users/password_reset_email.html'  # Письмо со ссылкой
+    success_url = reverse_lazy('users:password_reset_done')  # Перенаправление после отправки
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'users/password_reset_done.html'  # Уведомление о отправке письма
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'  # Форма ввода нового пароля
+    success_url = reverse_lazy('users:password_reset_complete')  # Перенаправление после успешного сброса
+
+    def form_invalid(self, form):
+        print("❌ Ошибка валидации формы! Ошибки:", form.errors)  # Добавляем логирование
+        return super().form_invalid(form)
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'users/password_reset_complete.html'  # Уведомление об успешном сбросе
