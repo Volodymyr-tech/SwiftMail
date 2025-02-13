@@ -15,8 +15,8 @@
         <form method="post">
       <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
           {% csrf_token %}
-        <button type="submit" class="btn btn-lg btn-primary">Подтвердить</button><div/>
-        <a href="{% url 'clients:home'%}" class="btn btn-lg btn-secondary" >Я передумал</a>
+        <button type="submit" class="btn btn-lg btn-primary">Подтвердить</button>
+        <a href="{% url 'clients:detail-client' pk=client.pk %}" class="btn btn-lg btn-secondary" >Я передумал</a>
       </div>
         </form>
     </div>

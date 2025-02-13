@@ -41,7 +41,7 @@ class UserEditForm(StyleProductMixin, forms.ModelForm):
     '''Форма для изменения профиля юзера'''
     class Meta:
         model = CustomUser
-        fields = ("email", "phone_number", "avatar")
+        fields = ("email", "phone_number", "username", "avatar")
 
 
 class UserLoginForm(StyleProductMixin, AuthenticationForm):

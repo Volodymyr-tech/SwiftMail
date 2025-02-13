@@ -4,7 +4,7 @@ from message.views import MessageListView, CreateMessageView, ReadMessageView, U
 app_name = 'message'
 
 urlpatterns = [
-    path('message/', MessageListView.as_view(), name='list'),
+    path('list/', MessageListView.as_view(), name='list'),
     path('add_message/', CreateMessageView.as_view(), name='add-message'),
     path('delete_message/<int:pk>', DeleteMessageView.as_view(), name='delete-message'),
     path('update_message/<int:pk>', UpdateMessageView.as_view(), name='update-message'),

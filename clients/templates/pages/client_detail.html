@@ -1,14 +1,15 @@
 {% extends "includes/base.html" %}
-
+{% load perm_tag %}
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
 <!-- Dropdown Card Example -->
+{% if user.is_authenticated and user|has_perm:'clients.view_client' %}
 <div class="card shadow mb-4">
     <!-- Card Header - Dropdown -->
     <div
         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Client detail view</h6>
+        <h6 class="m-0 font-weight-bold text-primary">{{client}}</h6>
         <div class="dropdown no-arrow">
             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -17,18 +18,18 @@
             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                 aria-labelledby="dropdownMenuLink">
                 <div class="dropdown-header">Client management:</div>
+                {% if user == client.owner %}
                 <a class="dropdown-item" href="{% url 'clients:update-client' pk=client.pk  %}">Update client</a>
                 <a class="dropdown-item" href="{% url 'clients:delete-client' pk=client.pk  %}">Delete client</a>
                 <div class="dropdown-divider"></div>
+                {% endif %}
                 <a class="dropdown-item" href="#">Something else here</a>
             </div>
         </div>
     </div>
     <!-- Card Body -->
     <div class="card-body">
-        Dropdown menus can be placed in the card header in order to extend the functionality
-        of a basic card. In this dropdown card example, the Font Awesome vertical ellipsis
-        icon in the card header can be clicked on in order to toggle a dropdown menu.
+        {{client.comment}}
     </div>
 </div>
 <!-- Content Row -->
@@ -115,4 +116,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
