@@ -1,0 +1,25 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSheet">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5">Вы точно хотите удалить клиента?</h1>
+      </div>
+      <div class="modal-body py-0">
+          <p>Нажимая кнопку подтвердить вы удаляете клиента из БД. Восстановление будет невозможным.</p>
+      </div>
+        <form method="post">
+      <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+          {% csrf_token %}
+        <button type="submit" class="btn btn-lg btn-primary">Подтвердить</button>
+        <a href="{% url 'clients:detail-client' pk=client.pk %}" class="btn btn-lg btn-secondary" >Я передумал</a>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

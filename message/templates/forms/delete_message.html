@@ -1,0 +1,25 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSheet">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5 text-center">Are you sure you want to delete the message?</h1>
+      </div>
+      <div class="modal-body py-0">
+          <p>By clicking the confirm button, you delete the client from the database. Recovery will be impossible.</p>
+      </div>
+      <form method="post">
+        <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-lg btn-primary w-100">Confirm</button>
+          <a href="{% url 'message:detail-message' pk=message.pk %}" class="btn btn-lg btn-secondary w-100 text-center">I've changed my mind.</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

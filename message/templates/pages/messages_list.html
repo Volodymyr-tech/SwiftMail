@@ -1,0 +1,48 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<main class="container">
+<div class="d-flex align-items-center justify-content-between p-3 my-3 text-white bg-gradient-warning rounded shadow-sm">
+    <div class="lh-1">
+        <h1 class="h6 mb-0 text-white lh-1"><strong>The list of messages</strong></h1>
+    </div>
+    <div class="dropdown ms-auto">
+        <button class="btn bg-gradient-primary dropdown-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Order by
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">  <!-- Меню откроется справа -->
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="container">
+  {% for message in messages %}
+    {% if forloop.counter0|divisibleby:2 %}
+      <div class="row">
+    {% endif %}
+
+    <div class="col-md-6 mb-3 mt-5">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ message.subject }}</h5>
+          <p class="card-text">{{ message.body|slice:":100" }}..</p>
+          <a href="{% url 'message:detail-message' pk=message.pk  %}" class="btn btn-primary">Check it out</a>
+        </div>
+      </div>
+    </div>
+
+    {% if forloop.counter|divisibleby:2 or forloop.last %}
+      </div>
+    {% endif %}
+  {% empty %}
+    <p class="text-center text-muted">Нет новых сообщений</p>
+  {% endfor %}
+</div>
+
+</main>
+{% endblock %}
