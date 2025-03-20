@@ -22,12 +22,10 @@ Low-level caching is implemented using **Redis** to improve system performance.
 ## Debugging
 The project uses **Django Debug Toolbar**. The settings are located in the `settings.py` file.
 
-## Installation and Run
-
-# Install dependencies using Poetry
+## Install dependencies using Poetry
 poetry install
 
-# Apply migrations
+## Apply migrations
 poetry run python manage.py migrate
 
 # Start the development server
