@@ -2,6 +2,7 @@ from django.db import models
 
 from clients.models import Client
 from message.models import Message
+from users.models import CustomUser
 
 
 # Create your models here.
@@ -16,11 +17,12 @@ class Mail(models.Model):
         (CREATED, 'Created'),
     ]
 
-    first_sending = models.DateTimeField(auto_now_add=True)
+    first_sending = models.DateTimeField(null=True)
     end_sending = models.DateTimeField(null=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=CREATED)
-    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    status = models.CharField(max_length=55, choices=STATUS_CHOICES, default=CREATED)
+    message = models.ForeignKey(Message, related_name="mails", on_delete=models.CASCADE)
     client = models.ManyToManyField(Client)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="mailing owner", related_name='mails')
 
     class Meta:
         verbose_name = 'Mail'
@@ -41,9 +43,10 @@ class MailingAttempt(models.Model):
     ]
 
     date_attempt = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=55, choices=STATUS_CHOICES)
     server_response = models.TextField(blank=True, null=True)
     mail = models.ForeignKey(Mail, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="owner_attempts" )
 
     class Meta:
         verbose_name = 'Mailing Attempt'

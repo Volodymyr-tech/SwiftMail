@@ -16,7 +16,7 @@
         <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
           {% csrf_token %}
           <button type="submit" class="btn btn-lg btn-primary w-100">Confirm</button>
-          <a href="{% url 'clients:home' %}" class="btn btn-lg btn-secondary w-100 text-center">I've changed my mind.</a>
+          <a href="{% url 'message:detail-message' pk=message.pk %}" class="btn btn-lg btn-secondary w-100 text-center">I've changed my mind.</a>
         </div>
       </form>
     </div>

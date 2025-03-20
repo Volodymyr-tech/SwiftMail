@@ -49,9 +49,8 @@ class CustomUser(AbstractUser):
     ]  # Поля, которые нужно запросить при создании суперюзера
 
     class Meta:
-        verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
-
+        verbose_name = "User"
+        verbose_name_plural = "Users"
 
     def __str__(self):
         return self.email

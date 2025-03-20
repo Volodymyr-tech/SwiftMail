@@ -6,10 +6,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         User = get_user_model()
         admin_user = User.objects.create_superuser(
-            username="supermanager",
-            email="admin@example.com",
-            first_name="Valdemar",
-            last_name="Tesla",
+            username="supermanager1",
+            email="vovateslenko.1996.28@gmail.com",
+            first_name="Vova",
+            last_name="Teslenko",
         )
         admin_user.set_password("PswqPwfsqWF2212")
 
